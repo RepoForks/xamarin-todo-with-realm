@@ -35,7 +35,7 @@
 - สร้าง Repository ผ่าน Realm.GetInstance()
 - เพิ่ม/ลบ/แก้ไข ข้อมูลผ่าน Block realm.BeginWrite()
 
-```
+```csharp
 public class TodoItemDatabase {
     Realm realm;
     public TodoItemDatabase() {
@@ -81,7 +81,7 @@ public class TodoItemDatabase {
 }
 ```
 
-## xamarin-todo-with-realm
+## Xamarin Todo with Realm
 
 Xamarin.Formsの [Todoサンプル](https://developer.xamarin.com/samples/xamarin-forms/Todo/) をSQLite仕様から [Realm Xamarin](https://realm.io/docs/xamarin/latest/) 仕様に置き換えたもの。
 
