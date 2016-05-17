@@ -9,74 +9,64 @@ using Xamarin.Forms;
 
 namespace Todo
 {
-    public partial class TodoItemListX : ContentPage
-    {
-        public TodoItemListX()
-        {
-            InitializeComponent();
+	public partial class TodoItemListX : ContentPage
+	{
+		public TodoItemListX ()
+		{
+			InitializeComponent ();
 
-            #region toolbar
-            ToolbarItem tbi = null;
-            if (Device.OS == TargetPlatform.iOS)
-            {
-                tbi = new ToolbarItem("+", null, () =>
-                {
-                    var todoItem = new TodoItem();
-                    var todoPage = new TodoItemPageX();
-                    todoPage.BindingContext = todoItem;
-                    Navigation.PushAsync(todoPage);
-                }, 0, 0);
-            }
-            if (Device.OS == TargetPlatform.Android)
-            { // BUG: Android doesn't support the icon being null
-                tbi = new ToolbarItem("+", "plus", () =>
-                {
-                    var todoItem = new TodoItem();
-                    var todoPage = new TodoItemPageX();
-                    todoPage.BindingContext = todoItem;
-                    Navigation.PushAsync(todoPage);
-                }, 0, 0);
-            }
-            if (Device.OS == TargetPlatform.WinPhone || Device.OS == TargetPlatform.Windows)
-            {
-                tbi = new ToolbarItem("Add", "add.png", () =>
-                {
-                    var todoItem = new TodoItem();
-                    var todoPage = new TodoItemPageX();
-                    todoPage.BindingContext = todoItem;
-                    Navigation.PushAsync(todoPage);
-                }, 0, 0);
-            }
+			ToolbarItem tbi = null;
+			if (Device.OS == TargetPlatform.iOS) {
+				tbi = new ToolbarItem ("+", null, () => {
+					var todoItem = new TodoItem ();
+					var todoPage = new TodoItemPageX ();
+					todoPage.BindingContext = todoItem;
+					Navigation.PushAsync (todoPage);
+				}, 0, 0);
+			}
+			if (Device.OS == TargetPlatform.Android) { // BUG: Android doesn't support the icon being null
+				tbi = new ToolbarItem ("+", "plus", () => {
+					var todoItem = new TodoItem ();
+					var todoPage = new TodoItemPageX ();
+					todoPage.BindingContext = todoItem;
+					Navigation.PushAsync (todoPage);
+				}, 0, 0);
+			}
+			if (Device.OS == TargetPlatform.WinPhone || Device.OS == TargetPlatform.Windows) {
+				tbi = new ToolbarItem ("Add", "add.png", () => {
+					var todoItem = new TodoItem ();
+					var todoPage = new TodoItemPageX ();
+					todoPage.BindingContext = todoItem;
+					Navigation.PushAsync (todoPage);
+				}, 0, 0);
+			}
 
-            ToolbarItems.Add(tbi);
+			ToolbarItems.Add (tbi);
 
-            if (Device.OS == TargetPlatform.iOS)
-            {
-                var tbi2 = new ToolbarItem("?", null, () =>
-                {
-                    var todos = App.Database.GetItemsNotDone();
-                    var tospeak = "";
-                    foreach (var t in todos)
-                        tospeak += t.Name + " ";
-                    if (tospeak == "") tospeak = "there are no tasks to do";
+			if (Device.OS == TargetPlatform.iOS) {
+				var tbi2 = new ToolbarItem ("?", null, () => {
+					var todos = App.Database.GetItemsNotDone ();
+					var tospeak = "";
+					foreach (var t in todos)
+						tospeak += t.Name + " ";
+					if (tospeak == "") tospeak = "there are no tasks to do";
 
-                    DependencyService.Get<ITextToSpeech>().Speak(tospeak);
-                }, 0, 0);
-                ToolbarItems.Add(tbi2);
-            }
-            #endregion
-        }
+					DependencyService.Get<ITextToSpeech> ().Speak (tospeak);
+				}, 0, 0);
+				ToolbarItems.Add (tbi2);
+			}
+		}
 
-        protected override void OnAppearing()
-        {
-            base.OnAppearing();
-            // reset the 'resume' id, since we just want to re-start here
+		protected override void OnAppearing ()
+		{
+			base.OnAppearing ();
+			// reset the 'resume' id, since we just want to re-start here
 			((App)App.Current).ResumeAtTodoId = null;
-            listView.ItemsSource = App.Database.GetItems();
-        }
+			listView.ItemsSource = App.Database.GetItems ();
+		}
 
-        void listItemSelected(object sender, SelectedItemChangedEventArgs e)
-        {
+		void listItemSelected (object sender, SelectedItemChangedEventArgs e)
+		{
 			var selectedItem = (TodoItem)e.SelectedItem;
 			var todoItem = new TodoItem {
 				ID = selectedItem.ID,
@@ -84,13 +74,13 @@ namespace Todo
 				Name = selectedItem.Name,
 				Notes = selectedItem.Notes,
 			};
-            var todoPage = new TodoItemPageX();
-            todoPage.BindingContext = todoItem;
+			var todoPage = new TodoItemPageX ();
+			todoPage.BindingContext = todoItem;
 
-            ((App)App.Current).ResumeAtTodoId = todoItem.ID;
-            Debug.WriteLine("setting ResumeAtTodoId = " + todoItem.ID);
+			((App)App.Current).ResumeAtTodoId = todoItem.ID;
+			Debug.WriteLine ("setting ResumeAtTodoId = " + todoItem.ID);
 
-            Navigation.PushAsync(todoPage);
-        }
-    }
+			Navigation.PushAsync (todoPage);
+		}
+	}
 }
